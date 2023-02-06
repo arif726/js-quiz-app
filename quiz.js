@@ -1,3 +1,4 @@
+// Dummy data for quiz project
 const data = [
     {
         id: 1,
@@ -31,6 +32,8 @@ const data = [
     },   
 ]
 
+//Getting all Elements
+
 const gameScreen = document.querySelector(".game");
 const resultScreen = document.querySelector(".result");
 const result = document.querySelector(".result");
@@ -39,6 +42,7 @@ const answerContainer = document.querySelector(".answers");
 const submit = document.querySelector(".submit");
 const playAgain = document.querySelector(".again");
 
+//initializing variables
 let qIndex = 0;
 let correctCount = 0;
 let wrongCount = 0;
@@ -46,28 +50,29 @@ let totalCount = 0;
 let selectedAnswer;
 
 const showquestion = (qNumber) => {
+    if (qIndex === data.length) return showResult();
+    selectedAnswer = null;
     question.textContent = data[qIndex].question;
+    //get item from object in an array use map
     answerContainer.innerHTML = data[qIndex].answers.map((item, index) =>
         `<div class="answer">
               <input type="radio" id="${index}" name="answer" value="${item.isCorrect}" />
               <label for="1">${item.answer}</label>
             </div>`
+        //join is use for removing extra comma
     ).join("");
     selectAnswer();
 };
 
 const selectAnswer = () => {
+    //forEach loop use callback function
     answerContainer.querySelectorAll("input").forEach(el => {
         el.addEventListener('click', (e) => {
             selectedAnswer = e.target.value;
         });
     });
 }
-
-const showResult = () => {
-    result.style.display="block";
-    gameScreen.style.display = "none";
-}
+//This is the tricky part. Without initialization next game is not working
 const showFirst = () => {
      qIndex = 0;
      correctCount = 0;
@@ -80,13 +85,18 @@ const showFirst = () => {
 
 const submitAnswer = () => {
     submit.addEventListener("click", () => {
-        qIndex++;
-        
-        if (qIndex === data.length) {
-            return showResult();
-        }
-          showquestion(qIndex);  
+        //if statement shortcut
+        (selectedAnswer === "true") ? correctCount++ : wrongCount++;
+            qIndex++;
+            showquestion(qIndex)       
     })
+}
+const showResult = () => {
+    result.style.display="block";
+    gameScreen.style.display = "none";
+    document.querySelector(".correct").textContent = `Correct Answer : ${correctCount}`
+    document.querySelector(".wrong").textContent = `Wrong Answer : ${wrongCount}`
+    document.querySelector(".score").textContent = `Score : ${correctCount*10}`
 }
 
 const plyAgain = () => {
