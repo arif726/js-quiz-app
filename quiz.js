@@ -33,7 +33,8 @@ const data = [
 ]
 
 //Getting all Elements
-
+const welcomePage = document.querySelector(".welcomePage");
+const start = document.querySelector(".start");
 const gameScreen = document.querySelector(".game");
 const resultScreen = document.querySelector(".result");
 const result = document.querySelector(".result");
@@ -48,8 +49,15 @@ let correctCount = 0;
 let wrongCount = 0;
 let totalCount = 0;
 let selectedAnswer;
+const startGame = () => {
+    start.addEventListener("click", () => {
+        welcomePage.style.display="none"
+        result.style.display="none";
+        gameScreen.style.display = "block";
 
-const showquestion = (qNumber) => {
+    })
+}
+const showquestion = () => {
     if (qIndex === data.length) return showResult();
     selectedAnswer = null;
     question.textContent = data[qIndex].question;
@@ -86,9 +94,11 @@ const showFirst = () => {
 const submitAnswer = () => {
     submit.addEventListener("click", () => {
         //if statement shortcut
-        (selectedAnswer === "true") ? correctCount++ : wrongCount++;
+        if (selectedAnswer !== null) {
+            (selectedAnswer === "true") ? correctCount++ : wrongCount++;
             qIndex++;
-            showquestion(qIndex)       
+            showquestion(qIndex) 
+        } else alert("Please Select an answer")    
     })
 }
 const showResult = () => {
@@ -107,7 +117,7 @@ const plyAgain = () => {
     })
 }
 
-
+startGame();
 showquestion(qIndex);
 submitAnswer();
 plyAgain();
